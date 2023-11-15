@@ -90,6 +90,7 @@ form button{
 }
 #submit-error{
     color: red;
+    display: none;
 }
 .input-group span i{
     color: seagreen;
