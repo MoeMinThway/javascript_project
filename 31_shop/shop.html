@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Shopping</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        height: 1000px;
+    }
+
+    img {
+        width: 500px;
+    }
+
+    .content {
+        margin: 30px;
+        columns: 300px 3;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        margin: 30px;
+    }
+
+    .table thead {
+        background-color: rgb(25, 60, 60);
+        color: rgb(161, 111, 111);
+
+    }
+
+    .table tr,
+    .table td,
+    .table th {
+        padding: 10px 15px;
+        /* border: 1px solid black; */
+
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: beige;
+    }
+
+    .table tbody tr:hover {
+        background-color: #eeee99;
+    }
+
+    .imageApi {
+        width: 100px;
+    }
+
+    .card {
+        display: flex;
+        justify-content: center;
+        margin: 10px;
+    }
+
+    .card-body {
+       width: 50%;
+       display: flex;
+
+     box-shadow: 1px 1px 10px #4a4a4a30;
+    }
+    .card-body img{
+        width: 200px;
+    }
+    .info{
+        padding-left: 50px;
+    }
+</style>
+
+<body>
+    <div class="card" id="card">
+       <div class="card-body">
+        
+       </div>
+    </div>
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th onclick="alertFunction()">id</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Rating</th>
+                    <th>Image</th>
+                </tr>
+            </thead>
+            <tbody id="page">
+
+            </tbody>
+
+        </table>
+    </div>
+</body>
+
+
+<script>
+
+    let page = document.getElementById("page")
+    let list = "";
+    let card=document.getElementById("card")
+
+     card.style.display ="none"
+
+    fetch('https://fakestoreapi.com/products')
+        .then((resp) =>
+            resp.json()
+        )
+        .then((result) => {
+            // console.log(result)
+            // ** +=  is important
+            for (let i = 0; i < result.length; i++) {
+                list += `
+                <tr onclick="detail(${result[i].id})">
+                     <td>${result[i].id}</td>
+                     <td>${result[i].title}</td>
+                      <td>$ ${result[i].price}</td>
+                      <td>${result[i].rating.rate}</td>
+                       <td>
+                      <a href="${result[i].image}" target=_blink>
+                         <img src="${result[i].image}" class="imageApi" alt="">
+                       </a>
+                    </td>
+                
+            </tr>
+                `
+            }
+
+            console.log(list)
+            page.innerHTML = list
+        })
+    function alertFunction() {
+        console.log("hi there");
+    }
+    function detail(id) {
+           fetch('https://fakestoreapi.com/products/'+id)
+            .then((resp) =>
+                resp.json()
+            )
+            .then((data) => {
+
+                card.innerHTML= `
+                 <div class="card-body">
+                     <img src="${data.image}">
+                       <div class="info">
+                         <h3>Name: ${data.title}</h3>
+                         <h4>Price: $ ${data.price}</h4>
+                          <h4>Rating: ${data.rating.rate}</h4>
+                       </div>
+                  </div>`
+           card.style.display = "block"
+              
+            })
+    }
+
+    //fetch
+
+    // fetch('https://fakestoreapi.com/products')
+    //     .then((resp) =>
+    //         resp.json()
+    //     )
+    //     .then((result) => {
+    //         console.log(result)
+    //     })
+
+
+    //async await
+
+    // let callApi = async () => {
+    //     let response = await fetch('https://fakestoreapi.com/products',{
+    //         method: 'GET',
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         },
+    //     })
+    //     let jsonResponse =await response.json()
+    //     console.log(jsonResponse)
+    // }
+    // callApi()
+
+
+    //
+
+</script>
+
+</html>
+
